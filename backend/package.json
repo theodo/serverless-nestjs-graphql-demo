@@ -12,15 +12,23 @@
   "dependencies": {
     "@nestjs/common": "6.2.4",
     "@nestjs/core": "6.2.4",
+    "serverless-dotenv-plugin": "^2.1.1",
+    "typescript": "3.4.5",
+    "@nestjs/graphql": "^6.2.1",
     "@nestjs/platform-express": "6.2.2",
+    "@types/graphql": "^14.2.0",
     "@types/pg": "^7.4.14",
+    "apollo-server-express": "^2.5.0",
     "aws-serverless-express": "^3.3.5",
+    "graphql": "^14.3.1",
+    "graphql-tools": "^4.0.4",
     "pg": "^7.11.0",
-    "reflect-metadata": "0.1.13",
+    "reflect-metadata": "^0.1.13",
     "rimraf": "^2.6.2",
     "rxjs": "6.5.2",
-    "serverless-dotenv-plugin": "^2.1.1",
-    "typescript": "3.4.5"
+    "sequelize": "^5.8.7",
+    "sequelize-typescript": "^0.6.11",
+    "type-graphql": "^0.17.4"
   },
   "devDependencies": {
     "@types/node": "7.10.6",

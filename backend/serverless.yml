@@ -21,6 +21,9 @@ provider:
       - ${env:SUBNET_2}
       - ${env:SUBNET_3}
 
+package:
+  include:
+    - src/**/*.graphql
 
 functions:
   main:
