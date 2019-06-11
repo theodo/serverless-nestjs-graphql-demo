@@ -1,5 +1,5 @@
-import { Inject, Injectable } from "@nestjs/common";
-import { State } from "./state.entity";
+import {Inject, Injectable} from "@nestjs/common";
+import {State} from "./state.entity";
 
 @Injectable()
 export class StateService {
@@ -8,12 +8,17 @@ export class StateService {
   ) {}
 
   create = async (state: State): Promise<State> => {
-    return await this.stateRepository.create(state);
+    const res = await this.stateRepository.create(state);
+    return res['dataValues'] as State;
   };
 
   update = async (state: State): Promise<State> => {
     const res = await this.stateRepository.update(state, {returning: true, where: {id: state.id}});
-    return res[0][0];
+    return res[1][0]['dataValues'] as State;
+  };
+
+  delete = async (id: number): Promise<void> => {
+    await this.stateRepository.destroy({where: {id}});
   };
 
   findAll = async (): Promise<State[]> => {

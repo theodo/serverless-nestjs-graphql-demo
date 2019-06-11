@@ -3,6 +3,7 @@ type Query {
 }
 type Mutation {
   saveState(state: StateInput): State
+  deleteState(id: Int): Int
 }
 
 type State {
