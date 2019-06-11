@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import TextField from '@material-ui/core/TextField';
-import { GET_STATES, SAVE_STATE } from 'Queries/States';
+import { SAVE_STATE } from 'Queries/States';
 import React, { useState } from 'react';
 import { gqlClient } from 'ApolloConfig';
 import '../State/state.css';
@@ -20,7 +20,6 @@ const NewStateComponent = () => {
         variables: {
           state: newState,
         },
-        refetchQueries: [{ query: GET_STATES }],
       });
       setStateText('');
     } catch (e) {
