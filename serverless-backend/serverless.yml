@@ -6,17 +6,12 @@ plugins:
   - serverless-plugin-optimize
   - serverless-offline
   - serverless-dotenv-plugin
-  - serverless-localstack
+  - serverless-plugin-warmup
 
 custom:
-  localstack:
-    host: http://localhost
-    stages:
-      # list of stages for which the plugin should be enabled
-      - local
-#    lambda:
-#      # Enable this flag to improve performance
-#      mountCode: True
+  warmup:
+    cleanFolder: false
+    enabled: true
 
 provider:
   name: aws

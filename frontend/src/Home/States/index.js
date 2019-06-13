@@ -70,9 +70,9 @@ class StatesComponent extends Component {
     return (
       <Container className="container">
         {states.map(state => (
-          <StateComponent key={state.id} selectedState={state} />
+          <StateComponent id={`state` + state.id} key={state.id} selectedState={state} />
         ))}
-        <NewStateComponent />
+        <NewStateComponent id="new_state" />
       </Container>
     );
   }

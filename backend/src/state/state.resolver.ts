@@ -1,10 +1,12 @@
 import { StateService } from "./state.service";
-import {Resolver, Query, Mutation, Args} from "@nestjs/graphql";
-import {PubsubService} from "../shared/pubsub.service";
+import {Resolver, Query, Mutation, Args, Subscription} from "@nestjs/graphql";
+import {PubSub} from "graphql-subscriptions";
+
+const pubSub = new PubSub();
 
 @Resolver()
 export class StateResolver {
-  constructor(private stateService: StateService, private pubsubService: PubsubService) {}
+  constructor(private stateService: StateService) {}
 
   @Query()
   async states() {
@@ -15,11 +17,11 @@ export class StateResolver {
   async saveState(@Args("state") state) {
     if (state.id) {
       const newState = await this.stateService.update(state);
-      await this.pubsubService.pubSub.publish('NEW_STATE', newState);
+      await pubSub.publish('NEW_STATE', {subscribeStates: newState});
       return newState;
     } else {
       const newState = await this.stateService.create(state);
-      await this.pubsubService.pubSub.publish('NEW_STATE', newState);
+      await pubSub.publish('NEW_STATE', {subscribeStates: newState});
       return newState;
     }
   }
@@ -27,7 +29,19 @@ export class StateResolver {
   @Mutation()
   async deleteState(@Args("id") id) {
       await this.stateService.delete(id);
-      await this.pubsubService.pubSub.publish('DELETED_STATE', id);
+      await pubSub.publish('DELETED_STATE', {subscribeDeletedStates: id});
       return id;
+  }
+
+  @Subscription()
+  subscribeStates() {
+    console.log('subscribe');
+    return pubSub.asyncIterator('NEW_STATE');
+  }
+
+  @Subscription()
+  subscribeDeletedStates() {
+    console.log('subscribe');
+    return pubSub.asyncIterator('DELETED_STATE');
   }
 }

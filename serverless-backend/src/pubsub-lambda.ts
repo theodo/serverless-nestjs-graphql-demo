@@ -80,10 +80,14 @@ const wsHandler = createWsHandler({
 });
 
 export const handler: Handler = (
-  event: APIGatewayWebSocketEvent | DynamoDBStreamEvent,
+  event: any,
   context,
 ) => {
   // detect event type
+  if (event.source === 'serverless-plugin-warmup') {
+    console.log('WarmUp - Lambda is warm!');
+    return;
+  }
   if ((event as DynamoDBStreamEvent).Records != null) {
     // event is DynamoDB stream event
     return eventProcessor(event as DynamoDBStreamEvent, context, null as any);

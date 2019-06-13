@@ -18,6 +18,10 @@ function bootstrapServer(): Promise<Server> {
 }
 
 export const handler: Handler = (event: any, context: Context) => {
+  if (event.source === 'serverless-plugin-warmup') {
+    console.log('WarmUp - Lambda is warm!');
+    return;
+  }
   if (!cachedServer) {
     bootstrapServer().then(server => {
       cachedServer = server;
