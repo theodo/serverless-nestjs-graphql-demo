@@ -1,6 +1,5 @@
 import { Table, Column, Model, DataType } from "sequelize-typescript";
 
-// @ts-ignore
 @Table({ tableName: "state" })
 export class State extends Model<State> {
   @Column({

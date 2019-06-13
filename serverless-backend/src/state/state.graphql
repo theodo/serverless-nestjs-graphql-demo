@@ -5,10 +5,6 @@ type Mutation {
   saveState(state: StateInput): State
   deleteState(id: Int): Int
 }
-type Subscription {
-  subscribeStates: State
-  subscribeDeletedStates: Int
-}
 
 type State {
   id: Int

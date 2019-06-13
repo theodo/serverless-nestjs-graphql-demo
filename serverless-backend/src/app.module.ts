@@ -10,8 +10,7 @@ import {GraphQLModule} from "@nestjs/graphql";
     DatabaseModule,
     GraphQLModule.forRoot({
       typePaths: ["./**/*.graphql", "/var/task/src/**/*.graphql"],
-      context: ({ req }) => ({ req }),
-      installSubscriptionHandlers: true,
+      context: ({ req }) => ({ req })
     })
   ],
   controllers: [AppController],
