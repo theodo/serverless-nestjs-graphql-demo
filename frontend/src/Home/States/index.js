@@ -1,6 +1,7 @@
 import { Container } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import { gqlClient, pubsubClient } from 'ApolloConfig';
+import Amplify from 'aws-amplify';
+import { backend, gqlClient, pubsubClient } from 'PubSubConfig';
 import NewStateComponent from 'Home/NewState';
 import StateComponent from 'Home/State';
 import {
@@ -25,28 +26,20 @@ class StatesComponent extends Component {
     count: 0,
   };
 
-  updateStates = async result => {
-    console.log('sub', result);
-    if (result.data && result.data.subscribeStates) {
-      const newState = result.data.subscribeStates;
-      const { found, newStates } = this.state.states.reduce(
-        ({ found, newStates }, state) => {
-          found = found || state.id === newState.id;
-          newStates.push(state.id === newState.id ? newState : state);
-          return { found, newStates };
-        },
-        { found: false, newStates: [] },
-      );
-      await this.setState({ states: found ? newStates : [...newStates, newState] });
-    }
+  updateStates = async newState => {
+    const { found, newStates } = this.state.states.reduce(
+      ({ found, newStates }, state) => {
+        found = found || state.id === newState.id;
+        newStates.push(state.id === newState.id ? newState : state);
+        return { found, newStates };
+      },
+      { found: false, newStates: [] },
+    );
+    await this.setState({ states: found ? newStates : [...newStates, newState] });
   };
 
-  deleteState = async result => {
-    console.log('delete sub', result);
-    if (result.data && result.data.subscribeDeletedStates) {
-      const id = result.data.subscribeDeletedStates;
-      this.setState({ states: this.state.states.filter(state => state.id !== id) });
-    }
+  deleteState = async id => {
+    this.setState({ states: this.state.states.filter(state => state.id !== id) });
   };
 
   testPerf = async () => {
@@ -128,45 +121,69 @@ class StatesComponent extends Component {
   };
 
   componentDidMount = () => {
-    pubsubClient
-      .subscribe({
-        query: SUBSCRIBE_STATES,
-        variables: {},
-      })
-      .subscribe(
-        {
-          next: data => {
-            const currentTime = new Date().getTime();
-            this.updateStates(data);
-            if (this.state.perfState !== 'no') {
-              this.computePerf(currentTime);
-            }
-          },
+    if (backend === 'serverless-mqtt') {
+      Amplify.PubSub.subscribe('NEW_STATE').subscribe({
+        next: data => {
+          const currentTime = new Date().getTime();
+          this.updateStates(data.value);
+          if (this.state.perfState !== 'no') {
+            this.computePerf(currentTime);
+          }
         },
-        () => console.log('error'),
-      );
+        error: error => console.error(error),
+        close: () => console.log('Done'),
+      });
+      Amplify.PubSub.subscribe('DELETED_STATE').subscribe({
+        next: data => {
+          const currentTime = new Date().getTime();
+          this.deleteState(data.value);
+          if (this.state.perfState !== 'no') {
+            this.computePerf(currentTime);
+          }
+        },
+        error: error => console.error(error),
+        close: () => console.log('Done'),
+      });
+    } else {
+      pubsubClient
+        .subscribe({
+          query: SUBSCRIBE_STATES,
+          variables: {},
+        })
+        .subscribe(
+          {
+            next: data => {
+              const currentTime = new Date().getTime();
+              this.updateStates(data.data.subscribeStates);
+              if (this.state.perfState !== 'no') {
+                this.computePerf(currentTime);
+              }
+            },
+          },
+          () => console.log('error'),
+        );
 
-    pubsubClient
-      .subscribe({
-        query: SUBSCRIBE_DELETED_STATES,
-        variables: {},
-      })
-      .subscribe(
-        {
-          next: data => {
-            const currentTime = new Date().getTime();
-            this.deleteState(data);
-            if (this.state.perfState !== 'no') {
-              this.computePerf(currentTime);
-            }
+      pubsubClient
+        .subscribe({
+          query: SUBSCRIBE_DELETED_STATES,
+          variables: {},
+        })
+        .subscribe(
+          {
+            next: data => {
+              const currentTime = new Date().getTime();
+              this.deleteState(data.data.subscribeDeletedStates);
+              if (this.state.perfState !== 'no') {
+                this.computePerf(currentTime);
+              }
+            },
           },
-        },
-        () => console.log('error'),
-      );
+          () => console.log('error'),
+        );
+    }
   };
   render() {
     const { states } = this.state;
-    console.log('state changed');
     return (
       <>
         <Container className="container">

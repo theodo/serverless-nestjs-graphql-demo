@@ -1,0 +1,36 @@
+service:
+  name: nest-graphql-mqtt-poc
+
+plugins:
+  - '@hewmen/serverless-plugin-typescript'
+  - serverless-plugin-optimize
+  - serverless-offline
+  - serverless-dotenv-plugin
+
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  region: ${env:REGION}
+  stage: ${env:NODE_ENV}
+#  vpc:
+#    securityGroupIds:
+#      - ${env:SECURITY_GROUP}
+#    subnetIds:
+#      - ${env:SUBNET_1}
+#      - ${env:SUBNET_2}
+#      - ${env:SUBNET_3}
+
+
+package:
+  include:
+    - src/**/*.graphql
+    - src/certs/*
+
+functions:
+  api:
+    handler: src/main-lambda.handler
+    events:
+      - http:
+          method: any
+          path: /{proxy+}

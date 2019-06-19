@@ -1,4 +1,4 @@
-import { gqlClient } from 'ApolloConfig';
+import { gqlClient } from 'PubSubConfig';
 import HomeComponent from 'Home';
 import { ApolloProvider } from 'react-apollo';
 import React from 'react';

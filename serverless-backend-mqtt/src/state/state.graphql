@@ -1,0 +1,16 @@
+type Query {
+  states: [State]
+}
+type Mutation {
+  saveState(state: StateInput): State
+  deleteState(id: Int): Int
+}
+
+type State {
+  id: Int
+  state: String
+}
+input StateInput {
+  id: Int
+  state: String
+}

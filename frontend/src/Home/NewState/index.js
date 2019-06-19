@@ -5,7 +5,7 @@ import CardContent from '@material-ui/core/CardContent';
 import TextField from '@material-ui/core/TextField';
 import { SAVE_STATE } from 'Queries/States';
 import React, { useState } from 'react';
-import { gqlClient } from 'ApolloConfig';
+import { gqlClient } from 'PubSubConfig';
 import '../State/state.css';
 
 const NewStateComponent = () => {

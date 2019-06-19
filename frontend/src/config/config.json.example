@@ -1,0 +1,38 @@
+{
+  "aws" : {
+    "elasticbeanstalk": {
+      "apiUrl": "https://xxx.eu-west-3.amazonaws.com/dev/graphql",
+      "webSocketUrl": "wss://xxx.eu-west-3.amazonaws.com/dev/"
+    },
+    "serverless-dynamodb": {
+      "apiUrl": "https://xxx.eu-west-3.amazonaws.com/dev/graphql",
+      "webSocketUrl": "wss://xxx.eu-west-3.amazonaws.com/dev/"
+    },
+    "serverless-mqtt": {
+      "apiUrl": "https://xxx.eu-west-3.amazonaws.com/dev/graphql",
+      "region": "eu-west-1",
+      "identityPoolId":"eu-west-1:xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+      "userPoolId": "eu-west-1_xxxxxxxxxx",
+      "userPoolWebClientId": "xxxxxxxxxxxxxxxxxxxxxxxx",
+      "mqttId": "xxxxxxxx-xxxx"
+    }
+  },
+  "local": {
+    "elasticbeanstalk": {
+      "apiUrl": "http://localhost:3000/graphql",
+      "webSocketUrl": "http://localhost:3000/graphql"
+    },
+    "serverless-dynamodb": {
+      "apiUrl": "http://localhost:3000/graphql",
+      "webSocketUrl": "http://localhost:3000/graphql"
+    },
+    "serverless-mqtt": {
+      "apiUrl": "http://localhost:3000/graphql",
+      "region": "eu-west-1",
+      "identityPoolId":"eu-west-1:xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+      "userPoolId": "eu-west-1_xxxxxxxxxx",
+      "userPoolWebClientId": "xxxxxxxxxxxxxxxxxxxxxxxx",
+      "mqttId": "xxxxxxxx-xxxx"
+    }
+  }
+}
