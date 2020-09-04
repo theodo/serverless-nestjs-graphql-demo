@@ -28,7 +28,7 @@
     "rxjs": "6.5.2",
     "sequelize": "^5.8.7",
     "sequelize-typescript": "^0.6.11",
-    "type-graphql": "^0.17.4",
+    "type-graphql": "^0.17.6",
     "typescript": "3.4.5"
   },
   "devDependencies": {
